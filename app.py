@@ -36,9 +36,18 @@
 import streamlit as st
 import pickle
 import numpy as np
+import os
+
+# Get the current working directory
+model_path = os.path.join(os.getcwd(), 'model.pkl')
 
 # Load the machine learning model
-model = pickle.load(open('model.pkl', 'rb'))
+try:
+    with open(model_path, 'rb') as model_file:
+        model = pickle.load(model_file)
+except FileNotFoundError:
+    st.error("Error: The model.pkl file was not found. Please make sure it is in the same directory as this script.")
+    st.stop()
 
 # App title and description
 st.title("Machine Learning Prediction App")
@@ -47,7 +56,7 @@ st.write("This app uses a pre-trained machine learning model to predict outcomes
 # User input
 st.header("Enter the input features:")
 
-# Example: Accepting three features as input
+# Example: Accepting two features as input
 feature_1 = st.number_input("Feature 1", value=0.0, format="%.2f")
 feature_2 = st.number_input("Feature 2", value=0.0, format="%.2f")
 
